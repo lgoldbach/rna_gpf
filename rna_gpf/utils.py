@@ -320,7 +320,6 @@ def ranked_ph_distribution(ph_distr_file, log=False) -> tuple:
 
     unf = max(distr)
     s = sum(distr) - unf
-    print(s, s/4**12)
 
     distr = distr / np.sum(distr)
     if log:

@@ -240,7 +240,7 @@ def dict_to_gpmap(ph_to_gt: dict, file: str) -> None:
             file_out.write(line)
     file_out.close()
 
-def load_phenotype_and_metric_from_file(file: str, dtype=float):
+def load_phenotype_and_metric_from_file(file: str, dtype=float, ignore: str = None):
     """Take a file in the common phenotype (col1) metric (col2) data-type 
     I am using and reat it as two array.
     Example file:
@@ -249,7 +249,8 @@ def load_phenotype_and_metric_from_file(file: str, dtype=float):
     ...
 
     Args:
-        file (str): Path to the file
+        file (str):     Path to the file
+        ignore (str):   (optional) Phenotype to ignore.
 
     Retruns:
         phenotypes, data
@@ -259,6 +260,16 @@ def load_phenotype_and_metric_from_file(file: str, dtype=float):
         file_data = np.expand_dims(file_data, axis=0)
     phenotypes = file_data[:,0]
     metric = file_data[:,1].astype(dtype)
+    
+    if ignore:
+        phenotypes_ = []
+        metric_ = []
+        for ph, m in zip(phenotypes, metric):
+            if ph != ignore:
+                phenotypes_.append(ph)
+                metric_.append(m)
+        phenotypes = phenotypes_
+        metric = metric_
 
     return phenotypes, metric
 
@@ -361,6 +372,19 @@ def read_adaptive_walks_w_ph_headers_to_dict(filepath, phenotypes):
                 ph_to_paths[ph].append(line)
     return ph_to_paths
         
+def read_navigability_per_fl(file: str) -> dict:
+    navig = {}
+    with open(file, "r") as file:
+        for line_ in file:
+            line = line_.strip().split(" ")
+            ph = line[0]
+            nav = float(line[1])
+            if ph in navig:
+                navig[ph].append(float(nav))
+            else:
+                navig[ph] = [float(nav)]
+    return navig
+    
 
 def read_navigability_per_ph_per_fl_file(file: str) -> dict:
     """Take a text file with navigability values and translate it into a 
