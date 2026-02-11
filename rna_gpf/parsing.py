@@ -270,7 +270,7 @@ def load_phenotype_and_metric_from_file(file: str, dtype=float, ignore: str = No
                 metric_.append(m)
         phenotypes = phenotypes_
         metric = metric_
-
+    
     return phenotypes, metric
 
 def genotype_file_to_numpy(filepath):
@@ -373,6 +373,30 @@ def read_adaptive_walks_w_ph_headers_to_dict(filepath, phenotypes):
     return ph_to_paths
         
 def read_navigability_per_fl(file: str) -> dict:
+    """Take a text file with navigability values and translate it into a 
+    dict that maps each phenotype to a list of navigability values, one for
+    each fitness landscape.
+
+    Args:
+        file (str): File path to a navigability file of the following format, 
+                    where each line corresponds to one fitness landscape and
+                    the first column indicates the global peak phenotype:
+                    <ph1 (str)> <navig. (float)>
+                    <ph2 (str)> <navig. (float)>
+                    ...
+
+    Returns:
+        dict:       Maps every phenotype to a list of navigability values, one
+                    for each fitness landscape where that phenotype was global
+                    peak (length of lists must not be identical):
+                    {<ph1 (str)>: [<navig. fl 1 (float)>, <navig. fl 2 (float)>, ...],
+                    <ph1 (str)>: <navig. fl 1 (float)>, <navig. fl 2 (float)> ...],
+                    ...}
+
+                    e.g.:
+                    {"((...))": [0.8, 0.65, 0.2], "(...)..": [1.0, 0.2, 0.3]}
+
+    """
     navig = {}
     with open(file, "r") as file:
         for line_ in file:
