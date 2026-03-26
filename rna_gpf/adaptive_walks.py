@@ -222,17 +222,13 @@ def nc_uniform_adaptive_walk(nc_graph: nx.DiGraph,
     path = [starting_nc]
 
     while len(path) < max_steps:
-        print(path, flush=True)
         successors = list(nc_graph.successors(path[-1]))
         # reached a peak if there are no successors in digraph
         if not successors:  
-            print(successors, flush=True)
             break
         else:
-            print(successors, flush=True)
             # randomly choose a successor (uniform adaptive walk)
             next_nc = rng.choice(successors)  
-            print(next_nc, flush=True)
             path.append(next_nc)
 
     return path

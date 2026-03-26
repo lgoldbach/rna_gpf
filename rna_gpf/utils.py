@@ -350,3 +350,28 @@ def sequence_to_integers(sequence, letters: Iterable):
         sequence_[sequence == l] = i
 
     return sequence_
+
+def random_mutation_at_sites(genotype: str, sites: list, alphabet: list):
+    """Introduce random mutation into genotype at given site (not in-place)
+
+    Args:
+        genotype (str): The genotype.
+        site (list): List of sites to be mutated.
+        alphabet (list): A list of single letters (str).
+
+    Returns:
+        new_gt (str): New genotype with mutation
+
+    """
+    gt_list = list(genotype)
+    for site in sites:
+        alph_wo_nucl = [l for l in alphabet if l != genotype[site]]
+        gt_list[site] = np.random.choice(alph_wo_nucl)
+    new_gt = "".join(gt_list)
+
+    return new_gt
+
+
+
+
+

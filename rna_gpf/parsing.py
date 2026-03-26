@@ -372,6 +372,7 @@ def read_adaptive_walks_w_ph_headers_to_dict(filepath, phenotypes):
                 ph_to_paths[ph].append(line)
     return ph_to_paths
         
+
 def read_navigability_per_fl(file: str) -> dict:
     """Take a text file with navigability values and translate it into a 
     dict that maps each phenotype to a list of navigability values, one for
