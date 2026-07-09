@@ -164,7 +164,7 @@ def gpmap_to_dict(gpmap_file: str, genotype_file: str = None) -> dict:
                             ...
 
         genotype_file (str): file path to a file that contains simple list of 
-                                genotypes (one per line)
+                                genotypes (one per line) (optional)
 
     Returns:
         gpmap (dict): Dictionary that maps genotype (str) to list of one or 
@@ -182,8 +182,9 @@ def gpmap_to_dict(gpmap_file: str, genotype_file: str = None) -> dict:
             l = line.split()
             db = l[0]
             for gt in l[1:]:
-                if genotype_file:
+                if genotype_file:  # use genotypes from file if available
                     gt = genotype_list[int(gt)]  # get genotype using id (i)
+                    
                 if gt in gp_map:
                     gp_map[gt].append(db)
                 else:
@@ -440,5 +441,45 @@ def read_navigability_per_ph_per_fl_file(file: str) -> dict:
             navig[ph] = [float(n) for n in line[1:]]
     
     return navig
+
+
+def load_nc_walks(nc_walk_file: str, remove_repetition: bool =True, delimiter: str =" ") -> list:
+    """Load file containing the path of adaptive walks along neutral components
+    into a list of paths (lists) and optionally remove repeated steps, i.e. 
+    if an adaptive walks lingers on the same NC for more than one step
+
+    Arguments:
+        nc_walk_file (str): File containing one path of neutral components per 
+                            line separated by <delimiter>.
+        remove_repetition (bool):   If True (Default), remove repeated steps 
+                                    on the same neutral components, e.g. turn
+                                    [12, 4, 4, 4, 54] into [12, 4, 54]
+        delimiter (str): How is the file delimited (Default: " ")
+
+    Returns:
+        paths (list of lists), where each list contains a path of neutral component ids 
+        (int).
+
+    """
+    paths = []
+    with open(nc_walk_file, "r") as f:
+        for line in f:
+            path_raw = line.strip().split(delimiter)
+            
+            if remove_repetition:
+                path = [int(path_raw[0])]  # init path with first nc of path
+                for nc in path_raw[1:]:
+                    nc_i = int(nc)
+                    if nc_i != path[-1]:
+                        path.append(nc_i)
+            else:
+                path = [int(nc) for nc in path_raw]
+
+            paths.append(path)
+
+    return paths
+
+
+                
 
 
