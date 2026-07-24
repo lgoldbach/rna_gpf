@@ -479,7 +479,12 @@ def load_nc_walks(nc_walk_file: str, remove_repetition: bool =True, delimiter: s
 
     return paths
 
-
-                
-
-
+def read_nc_to_gt_file(nc_to_gt_path):
+    nc_to_gt = {}
+    with open(nc_to_gt_path, "r") as f:
+        for line_ in f:
+            line = line_.strip().split(" ")
+            nc = line[0]
+            gts = line[2:]
+            nc_to_gt[nc] = gts
+    return nc_to_gt
