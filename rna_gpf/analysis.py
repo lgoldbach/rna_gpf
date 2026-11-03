@@ -59,6 +59,7 @@ def pairwise_consensus_matrix(phenotypes, pg_map, ref_gp_map):
             ph_j = phenotypes[j]
             # get genotypes that map to both phenos
             gt_intersect = set(pg_map[ph_i]).intersection(pg_map[ph_j])
+            print(len(gt_intersect))
             for gt in gt_intersect:  # loop over gt
                 # phenotype i is ranked above j
                 if ref_gp_map[gt][0] == ph_i:  

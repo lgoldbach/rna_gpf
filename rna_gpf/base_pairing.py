@@ -38,12 +38,11 @@ class BasePairing:
             self.A = self.get_adjacency_matrix(self.n, id)
         
     def get_adjacency_matrix(self, n, id):
-        # file name format is graph{n}.adj
-        file_path = self.graph_path + "graph" + str(n) + ".adj"
-        with open(file_path, "r") as file:
+        with open(self.graph_path, "r") as file:
             for line in file:  # loop over lines until we find right graph
                 # Graph header format: Graph 3, order 4.
-                if line.split(',')[0] == "Graph " + str(id):
+                print(line)
+                if line.strip() == "Graph " + str(id):
                     adjacency_matrix = []
                     # loop over rows of graph adjacency matrix
                     for i in range(n):
